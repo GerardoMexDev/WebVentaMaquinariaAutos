@@ -1,1 +1,366 @@
 @import "tailwindcss";
+
+@theme {
+  --color-ink: #14171d;
+  --color-coal: #1b1f27;
+  --color-steel: #262c37;
+  --color-smoke: #9aa3b2;
+  --color-fog: #ccd1d9;
+  --color-paper: #f4f3ee;
+  --color-concrete: #e9e8e1;
+  --color-linel: #d8d6cc;
+  --color-amber: #f5a623;
+  --color-amberdeep: #d18a0b;
+  --color-olive: #7c9a45;
+  --color-olivedeep: #55702a;
+  --color-autoblue: #4e7fa0;
+  --color-autodeep: #33617f;
+  --color-wa: #23c15e;
+  --color-wadeep: #17924a;
+  --color-wabubble: #d9f4d2;
+  --font-display: "Anton", "Arial Narrow", sans-serif;
+  --font-body: "Barlow", "Segoe UI", sans-serif;
+  --font-cond: "Barlow Condensed", "Arial Narrow", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-amber);
+  color: var(--color-ink);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-coal);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-steel);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-amberdeep);
+}
+
+/* ---------- textura de ruido global ---------- */
+.noise-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- patrones ---------- */
+.hazard {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-amber) 0 14px,
+    var(--color-ink) 14px 28px
+  );
+}
+
+.gridlines {
+  background-image: linear-gradient(rgba(20, 23, 29, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 23, 29, 0.055) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+.gridlines-dark {
+  background-image: linear-gradient(rgba(244, 243, 238, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 243, 238, 0.045) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+.dots-wa {
+  background-image: radial-gradient(rgba(20, 23, 29, 0.06) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+/* ---------- reveal on scroll ---------- */
+.rv {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.rv-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- titular con máscara de línea ---------- */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.mask-line > span {
+  display: block;
+  transform: translateY(118%);
+  animation: lineup 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes lineup {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ---------- ken burns ---------- */
+.kenburns {
+  animation: kenburns 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes kenburns {
+  from {
+    transform: scale(1.02) translate(0, 0);
+  }
+  to {
+    transform: scale(1.14) translate(-1.5%, -2%);
+  }
+}
+
+/* ---------- marquee ---------- */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- entrada de página ---------- */
+.page-in {
+  animation: pagein 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+@keyframes pagein {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- punto de estado ---------- */
+.pulse-dot {
+  position: relative;
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 2px solid currentColor;
+  opacity: 0.6;
+  animation: pulsedot 1.8s ease-out infinite;
+}
+@keyframes pulsedot {
+  from {
+    transform: scale(0.5);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* ---------- indicador de escritura (chat) ---------- */
+.wa-typing span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 2px;
+  border-radius: 9999px;
+  background: var(--color-smoke);
+  animation: waBlink 1.2s infinite ease-in-out;
+}
+.wa-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.wa-typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes waBlink {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+/* ---------- número outline ---------- */
+.num-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(245, 166, 35, 0.75);
+  transition: color 0.4s ease, -webkit-text-stroke-color 0.4s ease;
+}
+.group:hover .num-outline,
+.num-outline:hover {
+  color: var(--color-amber);
+  -webkit-text-stroke-color: var(--color-amber);
+}
+
+/* ---------- botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  font-family: var(--font-cond);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.82rem;
+  padding: 0.85rem 1.6rem;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+}
+.btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+.btn-amber {
+  background: var(--color-amber);
+  color: var(--color-ink);
+  box-shadow: 0 6px 0 -2px var(--color-amberdeep);
+}
+.btn-amber:hover {
+  background: #ffb63c;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(245, 166, 35, 0.55);
+}
+.btn-ghost-light {
+  border-color: rgba(244, 243, 238, 0.35);
+  color: var(--color-paper);
+}
+.btn-ghost-light:hover {
+  border-color: var(--color-amber);
+  color: var(--color-amber);
+  transform: translateY(-2px);
+}
+.btn-ghost-dark {
+  border-color: rgba(20, 23, 29, 0.3);
+  color: var(--color-ink);
+}
+.btn-ghost-dark:hover {
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-amber);
+  transform: translateY(-2px);
+}
+.btn-wa {
+  background: var(--color-wa);
+  color: #07270f;
+  box-shadow: 0 6px 0 -2px var(--color-wadeep);
+}
+.btn-wa:hover {
+  background: #31d76e;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(35, 193, 94, 0.5);
+}
+
+/* flecha que se desliza en hover */
+.arrow-slide {
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.group:hover .arrow-slide,
+a:hover > .arrow-slide,
+button:hover > .arrow-slide {
+  transform: translateX(5px);
+}
+
+/* ---------- tarjeta con esquinas técnicas ---------- */
+.corner-frame {
+  position: relative;
+}
+.corner-frame::before,
+.corner-frame::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: var(--color-amber);
+  border-style: solid;
+  transition: width 0.35s ease, height 0.35s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+.corner-frame::before {
+  top: -1px;
+  left: -1px;
+  border-width: 2.5px 0 0 2.5px;
+}
+.corner-frame::after {
+  bottom: -1px;
+  right: -1px;
+  border-width: 0 2.5px 2.5px 0;
+}
+.corner-frame:hover::before,
+.corner-frame:hover::after {
+  width: 40px;
+  height: 40px;
+}
+
+/* ---------- movimiento reducido ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .rv {
+    opacity: 1;
+    transform: none;
+  }
+  .mask-line > span {
+    transform: none;
+    animation: none;
+  }
+  .kenburns,
+  .marquee-track,
+  .pulse-dot::after {
+    animation: none !important;
+  }
+}
