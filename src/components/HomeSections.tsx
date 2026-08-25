@@ -287,7 +287,7 @@ export function AboutSection() {
         <Reveal delay={100} className="mt-16">
           <div className="grid border border-linel bg-concrete sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-linel">
             {[
-              { icon: "shield", t: "Garantía de fábrica", d: "Hasta 3 años o 6,000 h según marca y línea." },
+              { icon: "shield", t: "Garantía certificada", d: "Hasta 12 meses o 2,000 h en usados certificados Terramak." },
               { icon: "wrench", t: "Taller certificado", d: "Técnicos entrenados por fábrica, en patio y en campo." },
               { icon: "gear", t: "Repuestos originales", d: "Despacho nacional en 24 h desde almacén central." },
               { icon: "coins", t: "Financiamiento a medida", d: "Crédito, leasing y plan agro con cuotas semestrales." },

@@ -75,8 +75,8 @@ export default function Hero({ navigate, onWizard }: HeroProps) {
 
         <p className="mt-7 max-w-xl text-base leading-relaxed text-fog sm:text-lg">
           Maquinaria vial, agrícola y vehículos de trabajo de las marcas líderes mundiales —
-          con garantía de fábrica, financiamiento a tu medida y el respaldo de un taller
-          certificado que responde en campo.
+          usados certificados con horas y kilometraje comprobados, garantía Terramak,
+          financiamiento a tu medida y un taller que responde en campo.
         </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -91,7 +91,7 @@ export default function Hero({ navigate, onWizard }: HeroProps) {
         </div>
 
         <ul className="mt-10 flex flex-wrap gap-x-8 gap-y-2">
-          {["Garantía de fábrica", "Taller certificado", "Repuestos originales 24 h"].map(
+          {["Garantía Terramak Certified", "Taller certificado", "Repuestos originales 24 h"].map(
             (t) => (
               <li
                 key={t}

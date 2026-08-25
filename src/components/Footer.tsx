@@ -67,7 +67,7 @@ export default function Footer({ navigate, onWizard }: FooterProps) {
           <Logo />
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-smoke">
             Distribuidor multimarca de maquinaria vial, agrícola y vehículos de trabajo.
-            Stock real en Lima, garantía de fábrica y postventa certificada desde{" "}
+            Usados certificados con garantía Terramak y postventa de por vida desde{" "}
             {COMPANY.founded}.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
