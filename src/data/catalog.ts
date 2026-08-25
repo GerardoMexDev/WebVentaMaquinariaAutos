@@ -11,6 +11,9 @@ export interface Product {
   year: number;
   price: number;
   image: string;
+  /** Galería de fotos del equipo. Rutas relativas (ej. "fotos/vial/320gc/1.jpg")
+   *  para compatibilidad con GitHub Pages. Si se omite, se usa la foto principal. */
+  images?: string[];
   flip?: boolean;
   badge?: string;
   specs: string[];
@@ -471,6 +474,10 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const productsByCat = (cat: CategoryId) => PRODUCTS.filter((p) => p.cat === cat);
+
+/** Fotos del equipo: usa su galería propia o, como demo, principal + foto del patio. */
+export const galleryOf = (p: Product): string[] =>
+  p.images && p.images.length > 0 ? p.images : [p.image, COMPANY.yardImage];
 
 export const fmtPrice = (n: number) => "US$ " + n.toLocaleString("en-US");
 

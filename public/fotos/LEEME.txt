@@ -1,0 +1,16 @@
+GALERÍA DE FOTOS POR EQUIPO — TERRAMAK
+=======================================
+
+Coloca aquí las fotos reales, una carpeta por equipo:
+
+  public/fotos/vial/320gc/1.jpg
+  public/fotos/vial/320gc/2.jpg
+  public/fotos/agro/6110m/1.jpg
+  public/fotos/autos/hilux/1.jpg
+
+Luego, en src/data/catalog.ts, agrega el arreglo "images" al producto:
+
+  images: ["fotos/vial/320gc/1.jpg", "fotos/vial/320gc/2.jpg"],
+
+Importante: usa rutas SIN la barra inicial ("/") para que funcionen
+también cuando la web esté publicada en GitHub Pages.

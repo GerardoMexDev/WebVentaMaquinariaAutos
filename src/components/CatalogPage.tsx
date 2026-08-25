@@ -3,10 +3,12 @@ import {
   CategoryMeta,
   Product,
   fmtPrice,
+  galleryOf,
   productsByCat,
   waLink,
 } from "../data/catalog";
 import { HazardBar, Icon, Reveal } from "./ui";
+import GalleryLightbox from "./GalleryLightbox";
 
 type Props = {
   meta: CategoryMeta;
@@ -22,14 +24,17 @@ function ProductCard({
   p,
   meta,
   onWizard,
+  onGallery,
   delay,
 }: {
   p: Product;
   meta: CategoryMeta;
   onWizard: Props["onWizard"];
+  onGallery: (p: Product) => void;
   delay: number;
 }) {
   const [openFicha, setOpenFicha] = useState(false);
+  const photos = galleryOf(p);
 
   const directMsg = `Hola Terramak, quiero cotizar: ${p.brand} ${p.name} (${p.condition}, ${p.usage}). ¿Me confirman disponibilidad y precio final?`;
 
@@ -39,8 +44,13 @@ function ProductCard({
         className="group flex h-full flex-col border border-linel bg-paper transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_50px_-24px_rgba(20,23,29,0.35)]"
         style={{ "--acc": meta.color, "--accdeep": meta.colorDeep } as CSSProperties}
       >
-        {/* imagen */}
-        <div className="relative h-52 overflow-hidden bg-coal">
+        {/* imagen — clic abre la galería */}
+        <button
+          type="button"
+          onClick={() => onGallery(p)}
+          aria-label={`Ver fotos de ${p.brand} ${p.name}`}
+          className="relative block h-52 w-full cursor-zoom-in overflow-hidden bg-coal text-left"
+        >
           <div className={`h-full w-full ${p.flip ? "-scale-x-100" : ""}`}>
             <img
               src={p.image}
@@ -50,6 +60,13 @@ function ProductCard({
             />
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-transparent" />
+          {/* velo con invitación a ver la galería */}
+          <div className="absolute inset-0 grid place-items-center bg-ink/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <span className="flex items-center gap-2.5 border border-paper/40 bg-ink/70 px-4 py-2 font-cond text-[0.72rem] font-bold uppercase tracking-[0.2em] text-paper backdrop-blur-sm">
+              <Icon name="camera" className="h-4.5 w-4.5 text-amber" />
+              Ver galería
+            </span>
+          </div>
           <div className="absolute left-3 top-3 flex flex-wrap gap-2">
             <span
               className={`px-2.5 py-1 font-cond text-[0.64rem] font-bold uppercase tracking-[0.16em] ${
@@ -67,7 +84,11 @@ function ProductCard({
           <span className="absolute bottom-3 left-3 font-cond text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-fog">
             {p.type} · {p.usage}
           </span>
-        </div>
+          <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 bg-ink/80 px-2.5 py-1 font-cond text-[0.64rem] font-bold uppercase tracking-[0.14em] text-paper backdrop-blur-sm">
+            <Icon name="camera" className="h-3.5 w-3.5 text-amber" />
+            {photos.length} {photos.length === 1 ? "foto" : "fotos"}
+          </span>
+        </button>
 
         {/* cuerpo */}
         <div className="flex flex-1 flex-col p-6">
@@ -158,6 +179,7 @@ export default function CatalogPage({ meta, navigate, onWizard }: Props) {
   const [brand, setBrand] = useState("Todas");
   const [condition, setCondition] = useState<(typeof CONDITION_FILTERS)[number]>("Todos");
   const [sort, setSort] = useState<SortKey>("relevancia");
+  const [gallery, setGallery] = useState<Product | null>(null);
 
   const filtered = useMemo(() => {
     let list = all.filter(
@@ -299,7 +321,14 @@ export default function CatalogPage({ meta, navigate, onWizard }: Props) {
           {filtered.length > 0 ? (
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {filtered.map((p, i) => (
-                <ProductCard key={p.id} p={p} meta={meta} onWizard={onWizard} delay={(i % 3) * 90} />
+                <ProductCard
+                  key={p.id}
+                  p={p}
+                  meta={meta}
+                  onWizard={onWizard}
+                  onGallery={setGallery}
+                  delay={(i % 3) * 90}
+                />
               ))}
             </div>
           ) : (
@@ -357,6 +386,15 @@ export default function CatalogPage({ meta, navigate, onWizard }: Props) {
       </section>
 
       <HazardBar className="h-2.5" />
+
+      {/* galería de fotos del equipo */}
+      <GalleryLightbox
+        product={gallery}
+        images={gallery ? galleryOf(gallery) : []}
+        accent={meta.color}
+        onClose={() => setGallery(null)}
+        onWizard={(p) => onWizard(p)}
+      />
     </div>
   );
 }
